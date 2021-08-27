@@ -1,0 +1,1 @@
+﻿To make this example work you might need to setup thw WebView2 runtime: https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section/.
