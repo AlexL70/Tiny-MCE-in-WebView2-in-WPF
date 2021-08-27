@@ -12,6 +12,6 @@
             <Button x:Name="ButtonGo" DockPanel.Dock="Right" Click="ButtonGo_Click" Content="Go"/>
             <TextBox Name = "addressBar"/>
         </DockPanel>
-        <wv2:WebView2 Name="webView" Source="https://www.fortissio.com/" />
+        <wv2:WebView2 Name="webView" />
     </DockPanel>
 </Window>
