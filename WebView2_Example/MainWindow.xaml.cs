@@ -36,5 +36,13 @@ namespace WebView2_Example
                 webView.CoreWebView2.Navigate(addressBar.Text);
             }
         }
+
+        private void LoadHtmlIntoEditor(string innerHtml)
+        {
+            if (webView != null && webView.CoreWebView2 != null)
+            {
+                webView.CoreWebView2.ExecuteScriptAsync("");
+            }
+        }
     }
 }

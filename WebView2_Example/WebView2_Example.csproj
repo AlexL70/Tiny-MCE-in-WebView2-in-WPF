@@ -111,6 +111,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Editor.html" />
+    <Content Include="scripts\App\emailSender.js" />
+    <Content Include="scripts\App\load.js" />
     <Content Include="scripts\tinymce\icons\default\icons.js" />
     <Content Include="scripts\tinymce\icons\default\icons.min.js" />
     <Content Include="scripts\tinymce\jquery.tinymce.min.js" />

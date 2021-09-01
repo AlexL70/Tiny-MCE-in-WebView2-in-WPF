@@ -5,17 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="./scripts/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: '#mytextarea'
-        });
-    </script>
+    <script src="./scripts/App/emailSender.js"></script>
+    <script src="./scripts/App/load.js" defer></script>
     <title>Tiny MCE Editor</title>
 </head>
 <body>
     <h2>Example from <a href="https://www.tiny.cloud/docs/quick-start/">Tiny MCE Quick Start Guide</a></h2>
     <form method="post">
-        <textarea id="mytextarea">Hello World!</textarea>
+        <textarea id="tinyTextArea">Hello World!</textarea>
     </form>
 </body>
 </html>
