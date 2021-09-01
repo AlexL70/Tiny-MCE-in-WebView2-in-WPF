@@ -22,7 +22,14 @@
     }
 
     function decodeHtml(encodedText) {
-        return encodedText; // $('<div/>').html(encodedText).text();
+        let myDiv = document.createElement('div');
+        myDiv.innerHTML = encodedText;
+        return myDiv.innerText;
+    }
+
+    function addStyle(styleString) {
+        var sheet = window.document.styleSheets[0];
+        sheet.insertRule(styleString, sheet.cssRules.length);
     }
 
     this.emailTemplateEditor = function (body) {
@@ -109,7 +116,6 @@
             el.removeEventListener('focus', onFocusEditable)
             return;
         }
-        el.innerHTML = el.originalValue;
     }
 
     function transformTemplateForEditor(currentElement) {

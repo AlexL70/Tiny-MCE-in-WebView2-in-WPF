@@ -1,4 +1,5 @@
 ﻿using Microsoft.Web.WebView2.Core;
+using Microsoft.Win32;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace WebView2_Example
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string template = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -25,8 +28,18 @@ namespace WebView2_Example
             addressBar.Text = uri;
             if (webView != null && webView.CoreWebView2 != null)
             {
+                webView.CoreWebView2.DOMContentLoaded += CoreWebView2_DOMContentLoaded;
                 webView.CoreWebView2.Navigate(uri);
             }
+        }
+
+        private void CoreWebView2_DOMContentLoaded(object sender, CoreWebView2DOMContentLoadedEventArgs e)
+        {
+            webView.CoreWebView2.ExecuteScriptAsync($@"
+                        let module = new emailSendingModule();
+                        module.emailTemplateEditor('{template ?? "Hello Tiny MCE!"}');
+            ");
+            template = null;
         }
 
         private void ButtonGo_Click(object sender, RoutedEventArgs e)
@@ -37,12 +50,22 @@ namespace WebView2_Example
             }
         }
 
-        private void LoadHtmlIntoEditor(string innerHtml)
+        private void ButtonLoad_Click(object sender, RoutedEventArgs e)
         {
-            if (webView != null && webView.CoreWebView2 != null)
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
             {
-                webView.CoreWebView2.ExecuteScriptAsync("");
+                template = File.ReadAllText(openFileDialog.FileName);
+                if (webView != null && webView.CoreWebView2 != null)
+                {
+                    _ = InitializeAsync();
+                }
             }
+        }
+
+        private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
