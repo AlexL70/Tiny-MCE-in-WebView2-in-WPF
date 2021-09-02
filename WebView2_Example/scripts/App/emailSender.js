@@ -1,10 +1,7 @@
 ﻿function emailSendingModule(mailTemplate) {
-    this.loadData = function (mailTemplate) {
-        me.template = mailTemplate;
-    };
 
     this.isValidCorrespondenceBody = function (body) {
-        if(!body)
+        if (!body)
             body = this.getText();
         var parser = new DOMParser();
         var bodyDOM = parser.parseFromString(body, 'text/html');
@@ -28,11 +25,14 @@
     }
 
     function addStyle(styleString) {
-        var sheet = window.document.styleSheets[0];
-        sheet.insertRule(styleString, sheet.cssRules.length);
+        var sheet = document.createElement('style')
+        sheet.innerHTML = styleString;
+        document.body.appendChild(sheet);
+        //var sheet = window.document.styleSheets[0];
+        //sheet.addRule(styleString);
     }
 
-    this.getText = function() {
+    this.getText = function () {
         return decodeHtml(tinymce.activeEditor.getContent());
     }
 

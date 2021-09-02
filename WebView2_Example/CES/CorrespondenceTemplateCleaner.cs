@@ -45,9 +45,8 @@ namespace WebView2_Example.CES
         private string SetNewLines(string body)
         {
             var regexBr = new Regex(@"<br.*?\/>");
-            var result = regexBr.Replace(body, "\n")
+            return regexBr.Replace(body, "\n")
                 .Replace("&nbsp;", string.Empty);
-            return result;
         }
     }
 }
