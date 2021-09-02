@@ -70,13 +70,21 @@ namespace WebView2_Example
         {
             if (webView != null && webView.CoreWebView2 != null)
             {
-                var text = await webView.CoreWebView2.ExecuteScriptAsync("window.mcemodule.getText()");
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                if (text?.Length > 0 && saveFileDialog.ShowDialog() == true)
+                var isValid = await webView.CoreWebView2.ExecuteScriptAsync("window.mcemodule.isValidCorrespondenceBody()");
+                if (isValid == "true")
                 {
-                    var cleaner = new CorrespondenceTemplateCleaner();
-                    var cleaned = cleaner.CleanMail(processStringFromJS(text));
-                    File.WriteAllText(saveFileDialog.FileName, cleaned);
+                    var text = await webView.CoreWebView2.ExecuteScriptAsync("window.mcemodule.getText()");
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    if (text?.Length > 0 && saveFileDialog.ShowDialog() == true)
+                    {
+                        var cleaner = new CorrespondenceTemplateCleaner();
+                        var cleaned = cleaner.CleanMail(processStringFromJS(text));
+                        File.WriteAllText(saveFileDialog.FileName, cleaned);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please fill in all mandatory fields first.", "Error. Wrong email body.", MessageBoxButton.OK, MessageBoxImage.Stop);
                 }
             }
         }

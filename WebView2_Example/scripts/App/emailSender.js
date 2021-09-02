@@ -4,6 +4,8 @@
     };
 
     this.isValidCorrespondenceBody = function (body) {
+        if(!body)
+            body = this.getText();
         var parser = new DOMParser();
         var bodyDOM = parser.parseFromString(body, 'text/html');
         var mandatoryElements = bodyDOM.getElementsByClassName('mandatory');
