@@ -1,6 +1,4 @@
 ﻿function emailSendingModule(mailTemplate) {
-    const TEMPLATE_PLACEHOLDER = '{{Template}}';
-
     this.loadData = function (mailTemplate) {
         me.template = mailTemplate;
     };
@@ -22,14 +20,18 @@
     }
 
     function decodeHtml(encodedText) {
-        let myDiv = document.createElement('div');
-        myDiv.innerHTML = encodedText;
-        return myDiv.innerText;
+        let myText = document.createElement('textarea');
+        myText.innerHTML = encodedText;
+        return (myText.value);
     }
 
     function addStyle(styleString) {
         var sheet = window.document.styleSheets[0];
         sheet.insertRule(styleString, sheet.cssRules.length);
+    }
+
+    this.getText = function() {
+        return decodeHtml(tinymce.activeEditor.getContent());
     }
 
     this.emailTemplateEditor = function (body) {

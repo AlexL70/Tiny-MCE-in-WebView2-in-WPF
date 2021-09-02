@@ -2,8 +2,10 @@
 using Microsoft.Win32;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using WebView2_Example.CES;
 
 namespace WebView2_Example
 {
@@ -38,6 +40,7 @@ namespace WebView2_Example
             webView.CoreWebView2.ExecuteScriptAsync($@"
                         let module = new emailSendingModule();
                         module.emailTemplateEditor('{template ?? "Hello Tiny MCE!"}');
+                        window.mcemodule = module;
             ");
             template = null;
         }
@@ -63,9 +66,27 @@ namespace WebView2_Example
             }
         }
 
-        private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        private async void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
+            if (webView != null && webView.CoreWebView2 != null)
+            {
+                var text = await webView.CoreWebView2.ExecuteScriptAsync("window.mcemodule.getText()");
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                if (text?.Length > 0 && saveFileDialog.ShowDialog() == true)
+                {
+                    var cleaner = new CorrespondenceTemplateCleaner();
+                    var cleaned = cleaner.CleanMail(processStringFromJS(text));
+                    File.WriteAllText(saveFileDialog.FileName, cleaned);
+                }
+            }
+        }
 
+        private string processStringFromJS(string s)
+        {
+            var unescaped = Regex.Unescape(s);
+            unescaped = unescaped.StartsWith("\"") ? unescaped.Substring(1) : unescaped;
+            unescaped = unescaped.EndsWith("\"") ? unescaped.Substring(0, unescaped.Length - 1) : unescaped;
+            return unescaped;
         }
     }
 }
