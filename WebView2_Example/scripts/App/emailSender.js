@@ -28,8 +28,6 @@
         var sheet = document.createElement('style')
         sheet.innerHTML = styleString;
         document.body.appendChild(sheet);
-        //var sheet = window.document.styleSheets[0];
-        //sheet.addRule(styleString);
     }
 
     this.getText = function () {
@@ -128,7 +126,11 @@
         if (!currentElement.classList.contains('editable')) {
             currentElement.setAttribute('contenteditable', 'false');
         } else {
-            currentElement.style.backgroundColor = "yellow";
+            if (currentElement.classList.contains("mandatory")) {
+                currentElement.style.backgroundColor = "pink";
+            } else {
+                currentElement.style.backgroundColor = "lightgreen";
+            }
             currentElement.addEventListener('focus', onFocusEditable);
             currentElement.addEventListener('blur', onBlurEditable);
         }
