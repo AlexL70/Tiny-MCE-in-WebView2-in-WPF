@@ -69,20 +69,30 @@
             toolbar: 'undo redo | bold italic underline | fontselect fontsizeselect formatselect | alignleft aligncenter alignright | numlist bullist | forecolor backcolor | link anchor | media',
             setup: function (ed) {
                 ed.on('init', () => {
-                    setLastEditorBodyToNonEditable();
-                    traverseDomTree(tinyMCE.editors[tinyMCE.editors.length - 1].dom.doc.body, transformTemplateForEditor);
+                    let doc = tinyMCE.editors[tinyMCE.editors.length - 1].dom.doc;
+                    setLastEditorBodyToNonEditable(doc);
+                    traverseDomTree(doc.body, transformTemplateForEditor);
                     addStyle(`
                     .tox-pop__dialog {
                         display: none !important;
-                    }`)
+                    }`);
+                    doc.addEventListener('copy', onCopy, false);
                 });
             }
         });
     }
 
-    function setLastEditorBodyToNonEditable() {
-        tinyMCE.editors[tinyMCE.editors.length - 1].dom.doc.body.setAttribute("contenteditable", "false");
+    function setLastEditorBodyToNonEditable(doc) {
+        doc.body.setAttribute("contenteditable", "false");
     }
+
+    function onCopy(evt) {
+        // Change the copied text if you want
+        evt.clipboardData.setData("text/plain", "Copying of email content is not allowed");
+
+        // Prevent the default copy action
+        evt.preventDefault();
+    };
 
     function removePlaceholdersTokens(body) {
         const plceholdersTokesRegex = /##m%%|%%/g;
@@ -121,8 +131,7 @@
     }
 
     function transformTemplateForEditor(currentElement) {
-        var emptyValue = '&nbsp;';
-
+        currentElement.addEventListener('copy', onCopy, false);
         if (!currentElement.classList.contains('editable')) {
             currentElement.setAttribute('contenteditable', 'false');
         } else {
